@@ -1,33 +1,31 @@
-# Projeto de Automação e Desenvolvimento
+# Projeto de Automação com Puppeteer
 
 ## Descrição
 
-Este projeto abrange várias funcionalidades de desenvolvimento e automação. Inclui o desenvolvimento de uma aplicação para cadastro e exibição de pets, automação de tarefas web com Puppeteer, e configurações do servidor Nginx para comunicação segura. Abaixo estão detalhes sobre as principais funcionalidades e como configurá-las.
+Este projeto utiliza Puppeteer para automação de tarefas web, incluindo a extração de comentários e a navegação por múltiplas páginas com paginação. Este README fornece instruções sobre como configurar e executar o código Puppeteer para realizar essas tarefas.
 
 ## Funcionalidades
 
-### 1. Aplicação de Cadastro e Exibição de Pets
+### 1. Extração de Comentários
 
-Desenvolvimento de uma aplicação para cadastro e exibição de pets. Os dados dos pets são armazenados no `localStorage` e exibidos em uma tabela HTML.
+A função principal do código é extrair comentários de uma página web. Especificamente, o código verifica a presença de um comentário específico e, se encontrado, extrai todos os comentários associados ao cliente.
 
-### 2. Automação com Puppeteer
+#### Código para Extração de Comentários
 
-Utiliza o Puppeteer para realizar tarefas automatizadas em páginas web. As seguintes funcionalidades foram implementadas:
+```javascript
+if (comentarioLeonardo) {
+  const comentarioCliente = await page.evaluate(() => {
+    // Seleciona todos os elementos <p> dentro do bloco user-content-block
+    const paragrafos = document.querySelectorAll('.user-content-block p');
+    // Extrai e junta o texto de todos os parágrafos, removendo espaços extras
+    const comentario = Array.from(paragrafos)
+      .map(p => p.textContent.trim())
+      .join('\n\n'); // Junta os textos com uma linha em branco entre os parágrafos
+    return comentario;
+  });
 
-- **Extração de Comentários**: A função busca comentários de um cliente em uma página, verificando a presença de um comentário específico. O código ajustado para extrair todos os parágrafos dentro de um bloco específico é:
-
-  ```javascript
-  if (comentarioLeonardo) {
-    const comentarioCliente = await page.evaluate(() => {
-      const paragrafos = document.querySelectorAll('.user-content-block p');
-      const comentario = Array.from(paragrafos)
-        .map(p => p.textContent.trim())
-        .join('\n\n');
-      return comentario;
-    });
-
-    return {
-      comentarioLeonardo,
-      comentarioCliente: comentarioCliente || null,
-    };
-  }
+  return {
+    comentarioLeonardo,
+    comentarioCliente: comentarioCliente || null,
+  };
+}
